@@ -4676,10 +4676,10 @@ pub struct AccountResponse {
     pub custom_fields: Option<std::collections::HashMap<String, String>>,
     #[doc = "Timestamp when the account was created"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<i64>,
+    pub created_at: Option<f64>,
     #[doc = "Timestamp when the account was updated"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<i64>,
+    pub updated_at: Option<f64>,
 }
 
 impl std::fmt::Display for AccountResponse {
@@ -8508,13 +8508,13 @@ pub struct Reminder {
     pub underscore_links: Option<ReminderUnderscoreLinks>,
     #[doc = "Timestamp at which the conversation reminder has been created"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<i64>,
+    pub created_at: Option<f64>,
     #[doc = "Timestamp that the conversation reminder has been scheduled for"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub scheduled_at: Option<i64>,
+    pub scheduled_at: Option<f64>,
     #[doc = "Timestamp at which the conversation reminder has been updated"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<i64>,
+    pub updated_at: Option<f64>,
 }
 
 impl std::fmt::Display for Reminder {
@@ -9102,9 +9102,9 @@ pub struct ShiftResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub times: Option<ShiftIntervals>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<i64>,
+    pub created_at: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<i64>,
+    pub updated_at: Option<f64>,
 }
 
 impl std::fmt::Display for ShiftResponse {
@@ -9479,10 +9479,10 @@ pub struct TagResponse {
     pub is_visible_in_conversation_lists: Option<bool>,
     #[doc = "Timestamp of tag create creation"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<i64>,
+    pub created_at: Option<f64>,
     #[doc = "Timestamp of the last tag update"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<i64>,
+    pub updated_at: Option<f64>,
 }
 
 impl std::fmt::Display for TagResponse {
