@@ -4269,7 +4269,89 @@ impl tabled::Tabled for UpdateSignature {
     }
 }
 
-#[doc = "Highlight color of the tag."]
+/// Custom Highlight type that accepts both known colors and arbitrary strings (like emojis)
+#[derive(Debug, Clone, PartialEq, Eq, Hash, schemars::JsonSchema)]
+pub enum Highlight {
+    /// Standard color values
+    Known(HighlightColor),
+    /// Any other string value (including emojis)
+    Other(String),
+}
+
+impl serde::Serialize for Highlight {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            Highlight::Known(color) => color.serialize(serializer),
+            Highlight::Other(s) => serializer.serialize_str(s),
+        }
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for Highlight {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        match s.as_str() {
+            "grey" => Ok(Highlight::Known(HighlightColor::Grey)),
+            "pink" => Ok(Highlight::Known(HighlightColor::Pink)),
+            "red" => Ok(Highlight::Known(HighlightColor::Red)),
+            "orange" => Ok(Highlight::Known(HighlightColor::Orange)),
+            "yellow" => Ok(Highlight::Known(HighlightColor::Yellow)),
+            "green" => Ok(Highlight::Known(HighlightColor::Green)),
+            "light-blue" => Ok(Highlight::Known(HighlightColor::LightBlue)),
+            "blue" => Ok(Highlight::Known(HighlightColor::Blue)),
+            "purple" => Ok(Highlight::Known(HighlightColor::Purple)),
+            other => Ok(Highlight::Other(other.to_string())),
+        }
+    }
+}
+
+impl std::fmt::Display for Highlight {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        match self {
+            Highlight::Known(color) => write!(f, "{}", color),
+            Highlight::Other(s) => write!(f, "{}", s),
+        }
+    }
+}
+
+impl tabled::Tabled for Highlight {
+    const LENGTH: usize = 1;
+
+    fn fields(&self) -> Vec<String> {
+        vec![self.to_string()]
+    }
+
+    fn headers() -> Vec<String> {
+        vec!["highlight".to_string()]
+    }
+}
+
+impl std::str::FromStr for Highlight {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(match s {
+            "grey" => Highlight::Known(HighlightColor::Grey),
+            "pink" => Highlight::Known(HighlightColor::Pink),
+            "red" => Highlight::Known(HighlightColor::Red),
+            "orange" => Highlight::Known(HighlightColor::Orange),
+            "yellow" => Highlight::Known(HighlightColor::Yellow),
+            "green" => Highlight::Known(HighlightColor::Green),
+            "light-blue" => Highlight::Known(HighlightColor::LightBlue),
+            "blue" => Highlight::Known(HighlightColor::Blue),
+            "purple" => Highlight::Known(HighlightColor::Purple),
+            other => Highlight::Other(other.to_string()),
+        })
+    }
+}
+
+#[doc = "Standard highlight colors for tags"]
 #[derive(
     serde :: Serialize,
     serde :: Deserialize,
@@ -4284,7 +4366,7 @@ impl tabled::Tabled for UpdateSignature {
     parse_display :: FromStr,
     parse_display :: Display,
 )]
-pub enum Highlight {
+pub enum HighlightColor {
     #[serde(rename = "grey")]
     #[display("grey")]
     Grey,
@@ -7385,7 +7467,7 @@ pub struct ConversationResponse {
     pub links: Option<Vec<LinkResponse>>,
     #[doc = "Timestamp at which the conversation have been created."]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<i64>,
+    pub created_at: Option<f64>,
     #[doc = "Whether or not the conversation is private"]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_private: Option<bool>,
